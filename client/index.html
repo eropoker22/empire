@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EmpireStreets</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand__logo brand__logo--img" aria-label="EmpireStreets logo"></div>
+          <div>
+            <div class="brand__name">EmpireStreets</div>
+            <div class="brand__tag">Gangy. Distrikty. Kontrola.</div>
+          </div>
+          <nav class="topbar__nav">
+            <button class="nav-btn nav-btn--profile" id="nav-profile">Profil hráče</button>
+          </nav>
+        </div>
+        <div class="topbar__right">
+          <div class="topbar__stats">
+            <div class="stat">
+              <span class="stat__label">Hotovost</span>
+              <span class="stat__value" id="stat-cash">$0</span>
+            </div>
+            <div class="stat">
+              <span class="stat__label">Vliv</span>
+              <span class="stat__value" id="stat-influence">0</span>
+            </div>
+            <div class="stat">
+              <span class="stat__label">Struktura</span>
+              <span class="stat__value" id="stat-structure">-</span>
+            </div>
+            <div class="stat">
+              <span class="stat__label">Drogy</span>
+              <span class="stat__value" id="stat-drugs">0</span>
+            </div>
+            <div class="stat">
+              <span class="stat__label">Garáž</span>
+              <span class="stat__value" id="stat-garage">0</span>
+            </div>
+            <div class="stat stat--weapons" id="stat-weapons-wrap">
+              <span class="stat__label">Zbraně</span>
+              <span class="stat__value" id="stat-weapons">0</span>
+              <div class="stat__popover" id="weapons-popover">
+                <div class="stat__popover-title">Arzenál</div>
+                <div class="stat__popover-list" id="weapons-popover-list">
+                  <div class="stat__popover-item">
+                    <span>Baseballová pálka</span>
+                    <strong>7</strong>
+                  </div>
+                  <div class="stat__popover-item">
+                    <span>Pistole</span>
+                    <strong>14</strong>
+                  </div>
+                  <div class="stat__popover-item">
+                    <span>Samopal (SMG)</span>
+                    <strong>6</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="stat stat--defense" id="stat-defense-wrap">
+              <span class="stat__label">Obrana</span>
+              <span class="stat__value" id="stat-defense">0</span>
+              <div class="stat__popover" id="defense-popover">
+                <div class="stat__popover-title">Obrana</div>
+                <div class="stat__popover-list" id="defense-popover-list">
+                  <div class="stat__popover-item">
+                    <span>Neprůstřelná vesta</span>
+                    <strong>9</strong>
+                  </div>
+                  <div class="stat__popover-item">
+                    <span>Ocelové barikády</span>
+                    <strong>4</strong>
+                  </div>
+                  <div class="stat__popover-item">
+                    <span>Bezpečnostní kamery</span>
+                    <strong>8</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="nav-btn nav-btn--settings" id="nav-settings">Nastavení</button>
+          <button class="btn btn--danger topbar__logout" id="nav-logout">Odhlásit se</button>
+        </div>
+      </header>
+
+      <div id="guest-banner" class="guest-banner hidden">
+        Hraješ jako host. Přihlas se pro uložení postupu.
+      </div>
+
+      <main class="main">
+        <section class="panel panel--left">
+          <div class="card">
+            <h2>Městské události</h2>
+            <p class="muted">Dočasné úkoly s omezenou platností.</p>
+            <div class="events-list">
+              <div class="event-item">
+                <div>
+                  <strong>Převzetí skladu</strong>
+                  <div class="muted">Získej kontrolu nad skladem v průmyslové zóně.</div>
+                </div>
+                <div class="event-actions">
+                  <button class="btn btn--primary">Přijmout</button>
+                  <button class="btn btn--ghost">Odmítnout</button>
+                </div>
+              </div>
+              <div class="event-item">
+                <div>
+                  <strong>Ochrana konvoje</strong>
+                  <div class="muted">Doprovod konvoje skrz downtown.</div>
+                </div>
+                <div class="event-actions">
+                  <button class="btn btn--primary">Přijmout</button>
+                  <button class="btn btn--ghost">Odmítnout</button>
+                </div>
+              </div>
+              <div class="event-item">
+                <div>
+                  <strong>Uliční výpadek</strong>
+                  <div class="muted">Získej vliv během výpadku bezpečnostních kamer.</div>
+                </div>
+                <div class="event-actions">
+                  <button class="btn btn--primary">Přijmout</button>
+                  <button class="btn btn--ghost">Odmítnout</button>
+                </div>
+              </div>
+              <div class="event-item">
+                <div>
+                  <strong>Sabotáž konkurence</strong>
+                  <div class="muted">Zpomal rozvoj rivalů v komerční zóně.</div>
+                </div>
+                <div class="event-actions">
+                  <button class="btn btn--primary">Přijmout</button>
+                  <button class="btn btn--ghost">Odmítnout</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="ticker" id="event-feed">
+              <div class="ticker__title">Uliční zprávy</div>
+              <div class="ticker__items" id="event-items">
+                <div class="ticker__item">Čekám na rozkazy...</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="map-area">
+          <div class="map-header">
+            <h1>Mapa kontroly města</h1>
+            <div class="map-legend">
+              <span class="legend legend--owned">Ovládáno</span>
+              <span class="legend legend--contested">Sporné</span>
+              <span class="legend legend--neutral">Neutrální</span>
+            </div>
+          </div>
+          <canvas id="city-map" width="960" height="640"></canvas>
+          <div id="map-tooltip" class="map-tooltip hidden"></div>
+        </section>
+
+        <section class="panel panel--right">
+          <div class="card">
+            <h2>Profil gangu</h2>
+            <div class="profile-row">
+              <span>Gang</span>
+              <strong id="profile-gang">-</strong>
+            </div>
+            <div class="profile-row">
+              <span>Struktura</span>
+              <strong id="profile-structure">-</strong>
+            </div>
+            <div class="profile-row">
+              <span>Distrikty</span>
+              <strong id="profile-districts">0</strong>
+            </div>
+            <div class="profile-row">
+              <span>Aliance</span>
+              <strong id="profile-alliance">Žádná</strong>
+            </div>
+          </div>
+          <div class="card">
+            <h2>Aliance</h2>
+            <p class="muted">Vytvoř nebo se připoj k alianci pro sdílené bonusy.</p>
+            <button class="btn btn--primary" id="alliance-btn">Konzole aliance</button>
+            <div class="alliance-chat">
+              <div class="alliance-chat__title">Chat aliance</div>
+              <div class="alliance-chat__log">
+                <div class="alliance-chat__item">[09:12] Raven: Potřebujeme posily na sever.</div>
+                <div class="alliance-chat__item">[09:14] Lira: Posílám tým, 5 minut.</div>
+              </div>
+              <div class="alliance-chat__input">
+                <input type="text" placeholder="Napiš zprávu..." />
+                <button class="btn btn--ghost">Odeslat</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <h2>Stav kola</h2>
+            <div class="profile-row">
+              <span>Konec</span>
+              <strong id="round-ends">-</strong>
+            </div>
+            <div class="profile-row">
+              <span>Zbývá dní</span>
+              <strong id="round-days">-</strong>
+            </div>
+            <button class="btn btn--ghost" id="refresh-round">Obnovit</button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="district-modal" class="modal hidden">
+      <div id="modal-backdrop" class="modal__backdrop"></div>
+      <div class="modal__content">
+        <div class="modal__header">
+          <h3 id="modal-name">Distrikt</h3>
+          <button class="modal__close" id="modal-close" aria-label="Zavřít">✕</button>
+        </div>
+        <div class="modal__body">
+          <div class="modal__row">
+            <span>Typ</span>
+            <strong id="modal-type">-</strong>
+          </div>
+          <div class="modal__row">
+            <span>Vlastník</span>
+            <strong id="modal-owner">Neobsazeno</strong>
+          </div>
+          <div class="modal__row">
+            <span>Příjem</span>
+            <strong id="modal-income">$0/hod</strong>
+          </div>
+          <div class="modal__row">
+            <span>Vliv</span>
+            <strong id="modal-influence">0</strong>
+          </div>
+          <div id="modal-park-gallery" class="modal__gallery hidden">
+            <div class="modal__gallery-title">Atmosféra parku</div>
+            <div class="modal__gallery-grid" id="modal-park-images"></div>
+          </div>
+          <div class="modal__actions">
+            <button class="btn btn--danger" id="attack-btn">Zaútočit</button>
+            <button class="btn btn--primary" id="raid-btn">Vykrást</button>
+            <button class="btn btn--warn" id="spy-btn">Špehovat</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="profile-modal" class="modal hidden">
+      <div id="profile-modal-backdrop" class="modal__backdrop"></div>
+      <div class="modal__content modal__content--profile">
+        <div class="modal__header">
+          <h3>Profil hráče</h3>
+          <button class="modal__close" id="profile-modal-close" aria-label="Zavřít">✕</button>
+        </div>
+        <div class="modal__body">
+          <div class="profile-avatar">
+            <img id="profile-avatar" alt="Avatar hráče" />
+          </div>
+          <div class="modal__row">
+            <span>Uživatelské jméno</span>
+            <strong id="profile-modal-username">-</strong>
+          </div>
+          <div class="modal__row">
+            <span>Gang</span>
+            <strong id="profile-modal-gang">-</strong>
+          </div>
+          <div class="modal__row">
+            <span>Struktura</span>
+            <strong id="profile-modal-structure">-</strong>
+          </div>
+          <div class="modal__row">
+            <span>Aliance</span>
+            <strong id="profile-modal-alliance">Žádná</strong>
+          </div>
+          <div class="modal__row">
+            <span>Distrikty</span>
+            <strong id="profile-modal-districts">0</strong>
+          </div>
+          <div class="modal__row">
+            <span>Hotovost</span>
+            <strong id="profile-modal-cash">$0</strong>
+          </div>
+          <div class="modal__row">
+            <span>Drogy</span>
+            <strong id="profile-modal-drugs">0</strong>
+          </div>
+          <div class="modal__row">
+            <span>Garáž</span>
+            <strong id="profile-modal-garage">0</strong>
+          </div>
+          <div class="modal__row">
+            <span>Zbraně</span>
+            <strong id="profile-modal-weapons">0</strong>
+          </div>
+          <div class="modal__row">
+            <span>Obrana</span>
+            <strong id="profile-modal-defense">0</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="settings-modal" class="modal hidden">
+      <div id="settings-modal-backdrop" class="modal__backdrop"></div>
+      <div class="modal__content modal__content--profile">
+        <div class="modal__header">
+          <h3>Nastavení</h3>
+          <button class="modal__close" id="settings-modal-close" aria-label="Zavřít">✕</button>
+        </div>
+        <div class="modal__body">
+          <div class="modal__row">
+            <span>Zvuk</span>
+            <label class="toggle">
+              <input type="checkbox" checked />
+              <span class="toggle__track"></span>
+            </label>
+          </div>
+          <div class="modal__row">
+            <span>Hudba</span>
+            <label class="toggle">
+              <input type="checkbox" checked />
+              <span class="toggle__track"></span>
+            </label>
+          </div>
+          <div class="modal__row">
+            <span>Notifikace</span>
+            <label class="toggle">
+              <input type="checkbox" checked />
+              <span class="toggle__track"></span>
+            </label>
+          </div>
+          <div class="modal__row">
+            <span>Kvalita efektů</span>
+            <div class="select">
+              <select>
+                <option>Vysoká</option>
+                <option>Střední</option>
+                <option>Nízká</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal__row">
+            <span>Jazyk</span>
+            <div class="select">
+              <select>
+                <option>Čeština</option>
+                <option>English</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="gen/rng.js"></script>
+    <script src="gen/noise.js"></script>
+    <script src="gen/voronoi.js"></script>
+    <script src="gen/city.js"></script>
+    <script src="api.js"></script>
+    <script src="ws.js"></script>
+    <script src="map.js"></script>
+    <script src="ui.js"></script>
+  </body>
+</html>
